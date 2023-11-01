@@ -1,0 +1,87 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: { typeName: 'Zertifikatsverwaltung',
+                typeNamePlural: 'Zertifikate',
+                title: { type: #STANDARD, label: 'Zertifikate', value: 'Material' } },
+  presentationVariant: [{ sortOrder: [{ by: 'Material', direction:  #DESC }] }] }
+
+annotate view ZC_Certificate with
+{
+  @UI.facet: [
+                /* Header Data */
+              {
+                purpose:    #HEADER,
+                type:       #FIELDGROUP_REFERENCE,
+                importance: #HIGH,
+                position:   1,
+                label:      'Technische Daten',
+                targetQualifier: 'Kopfdaten'
+              },
+
+              { id:              'Certificate',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Zertifikatsverwaltung',
+                 position:        10 },
+              {
+                 purpose:    #STANDARD,
+                 type:       #FIELDGROUP_REFERENCE,
+                 importance: #HIGH,
+                 position:   20,
+                 targetQualifier: 'Detail',
+                 label: 'Detailinfo'
+              },
+              { id:              'CertificateState',
+                purpose:         #STANDARD,
+                type:            #LINEITEM_REFERENCE,
+                label:           'Statusänderungen',
+                position:        30,
+                targetElement:   '_CertificateState'
+              } ]
+
+  @UI.hidden: true
+  CertUUID;
+
+  @UI: {  lineItem:       [ { position: 10 } ],
+          identification: [ { position: 10 } ],
+          selectionField: [ { position: 10 } ] }
+  Material;
+  @UI: {  lineItem:       [ { position: 20, label : 'Materialbezeichnung' } ],
+          identification: [ { position: 20 } ]
+          }
+  MaterialName;
+  @UI: {  lineItem:       [ { position: 30 },
+        { type: #FOR_ACTION, dataAction: 'newVersion', label: 'Neue Version' },
+        { type: #FOR_ACTION, dataAction: 'releaseVersion', label: 'Version aktivieren' },
+        { type: #FOR_ACTION, dataAction: 'archiveVersion', label: 'Version dekativieren' }
+  ],
+          fieldGroup: [ { qualifier: 'Kopfdaten',position: 30 }  ],
+          selectionField: [ { position: 30 } ]
+          }
+  Version;
+  @UI: {  lineItem:       [ { position: 40, criticality: 'Criticality', label: 'Status' } ],
+          fieldGroup: [ { qualifier: 'Kopfdaten',position: 40, label: 'Status', criticality: 'Criticality' }  ],
+          selectionField: [ { position: 40 } ] }
+  StatusText;
+
+  @UI: {  lineItem:       [ { position: 50 } ],
+          identification: [ { position: 50 } ] }
+  CertificateCe;
+  @UI: {  lineItem:       [ { position: 60 } ],
+          identification: [ { position: 60 } ] }
+  CertificateGs;
+  @UI: {  lineItem:       [ { position: 70 } ],
+          identification: [ { position: 70 } ] }
+  CertificateFcc;
+  @UI: {  lineItem:       [ { position: 80 } ],
+          identification: [ { position: 80 } ] }
+  CertificateIso;
+  @UI: {  lineItem:       [ { position: 90 } ],
+          identification: [ { position: 90 } ] }
+  CertificateTuev;
+  @UI.fieldGroup: [ { qualifier: 'Detail',position: 10 }  ]
+  MaterialText;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

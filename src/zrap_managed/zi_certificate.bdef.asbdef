@@ -1,0 +1,70 @@
+managed;
+with draft;
+
+define behavior for ZI_Certificate alias Certificate
+implementation in class zbp_i_certificate unique
+persistent table zbca_certificate
+draft table zbcd_certificate
+
+lock master total etag LocalLastChangedAt
+etag master LocalLastChangedAt
+{
+
+  create;
+  update;
+  delete;
+  association _CertificateState { internal create; with draft; }
+
+  field ( numbering : managed, readonly ) CertUUID;
+  field ( mandatory ) Material;
+
+  determination setInitialValues on modify { create; }
+  validation checkMaterial on save { field Material; create; update; }
+
+  action ( features : instance ) newVersion result [1] $self;
+  action ( features : instance ) releaseVersion result [1] $self;
+  action ( features : instance ) archiveVersion result [1] $self;
+
+  mapping for zbca_certificate
+  {
+    CertUUID = cert_uuid;
+    Material = matnr;
+    Version = version;
+    CertificationStatus = cert_status;
+    CertificateCe = cert_ce;
+    CertificateGs = cert_gs;
+    CertificateFcc = cert_fcc;
+    CertificateIso = cert_iso;
+    CertificateTuev = cert_tuev;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+
+}
+
+define behavior for ZI_CertificateState alias CertificateState
+persistent table zbca_certi_state
+draft table zbcd_certi_state
+lock dependent by _Certificate
+etag master LocalLastChangedAt
+{
+
+  association _Certificate { with draft; }
+
+  delete;
+
+  field ( numbering : managed, readonly ) StateUUID;
+
+  mapping for zbca_certi_state
+  {
+    StateUUID = state_uuid;
+    CertUUID = cert_uuid;
+    Material = matnr;
+    Version = version;
+    Status = status;
+    StatusOld = status_old;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+
+}

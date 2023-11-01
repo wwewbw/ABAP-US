@@ -1,0 +1,7 @@
+@EndUserText.label: 'Service Definition to manage Certificate'
+define service ZUI_Certificate_U {
+  expose ZC_Certificate as Certificate;
+  expose ZC_CertificateState as CertificateState;
+  expose I_MaterialText as Material_VH;
+  expose ZI_Status_VH as Status_VH;
+}
